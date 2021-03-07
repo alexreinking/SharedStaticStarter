@@ -1,0 +1,35 @@
+name: Test
+on: [ 'push' ]
+jobs:
+  test:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ windows-latest, macos-latest, ubuntu-latest ]
+    steps:
+      - name: Install Windows dependencies
+        if: runner.os == 'Windows'
+        run: choco install cmake ninja
+      - name: Install macOS dependencies
+        if: runner.os == 'macOS'
+        run: brew install cmake ninja
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null \
+            | gpg --dearmor - | sudo tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null
+          sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ focal main'
+          sudo apt update
+          sudo apt install cmake ninja-build
+      - name: Enable Developer Command Prompt
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+      - name: Check out sources
+        uses: actions/checkout@v2
+      - name: Run tests
+        run: |
+          cmake -G Ninja -S tests -B build
+          cd build
+          ctest --output-on-failure
