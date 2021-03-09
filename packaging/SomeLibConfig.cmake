@@ -1,8 +1,16 @@
 cmake_minimum_required(VERSION 3.19)
 
-foreach (comp IN ITEMS static shared)
-    if (comp IN_LIST ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
-        set(SomeLib_comp_${comp} YES)
+set(SomeLib_known_comps static shared)
+set(SomeLib_comp_static NO)
+set(SomeLib_comp_shared NO)
+foreach (SomeLib_comp IN LISTS ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
+    if (SomeLib_comp IN_LIST SomeLib_known_comps)
+        set(SomeLib_comp_${SomeLib_comp} YES)
+    else ()
+        set(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE
+            "SomeLib does not recognize component `${SomeLib_comp}`.")
+        set(${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
+        return()
     endif ()
 endforeach ()
 

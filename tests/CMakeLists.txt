@@ -149,6 +149,13 @@ add_integration_test(
     EXPECTED "SomeLib `static` and `shared` components are mutually exclusive."
 )
 
+add_integration_test(
+    NAME fail-invalid-component
+    ROOT install-both
+    OPTIONS "-Dexample_SomeLib_components=foo"
+    EXPECTED "SomeLib does not recognize component `foo`."
+)
+
 ## Shared only
 
 add_integration_test(
