@@ -39,9 +39,7 @@ target_include_directories(
 ## Include the install rules if the user wanted them (included by default when top-level)
 
 string(COMPARE EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}" is_top_level)
-set(SomeLib_INCLUDE_PACKAGING "${is_top_level}"
-    CACHE BOOL "Include packaging rules for SomeLib")
-
+option(SomeLib_INCLUDE_PACKAGING "Include packaging rules for SomeLib" "${is_top_level}")
 if (SomeLib_INCLUDE_PACKAGING)
     add_subdirectory(packaging)
 endif ()
