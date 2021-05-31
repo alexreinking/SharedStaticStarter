@@ -1,8 +1,10 @@
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
-set(SomeLib_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/SomeLib"
-    CACHE STRING "Path to SomeLib CMake files")
+if (NOT DEFINED SomeLib_INSTALL_CMAKEDIR)
+   set(SomeLib_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/SomeLib"
+       CACHE STRING "Path to SomeLib CMake files")
+endif ()
 
 install(TARGETS SomeLib EXPORT SomeLib_Targets
         RUNTIME COMPONENT SomeLib_Runtime
